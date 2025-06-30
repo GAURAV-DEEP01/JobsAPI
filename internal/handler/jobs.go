@@ -2,13 +2,15 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/gaurav-deep01/jobboard-api/internal/db"
-	"github.com/go-chi/chi/v5"
 	"net/http"
+
+	"github.com/gaurav-deep01/jobboard-api/internal/db"
+	"github.com/gaurav-deep01/jobboard-api/internal/model"
+	"github.com/go-chi/chi/v5"
 )
 
 func AllJobs(w http.ResponseWriter, r *http.Request) {
-	jobs, err := db.GetAllJobs()
+	jobs, err := db.GetAllJobs(r.Context())
 	if err != nil {
 		http.Error(w, "Failed to get jobs", http.StatusInternalServerError)
 		return
@@ -18,12 +20,12 @@ func AllJobs(w http.ResponseWriter, r *http.Request) {
 }
 
 func AddJob(w http.ResponseWriter, r *http.Request) {
-	var job db.Job
+	var job model.Job
 	if err := json.NewDecoder(r.Body).Decode(&job); err != nil {
 		http.Error(w, "Invalid request body", http.StatusBadRequest)
 		return
 	}
-	if err := db.AddJob(job); err != nil {
+	if err := db.AddJob(r.Context(), job); err != nil {
 		http.Error(w, "Failed to add job", http.StatusInternalServerError)
 		return
 	}
@@ -35,7 +37,7 @@ func AddJob(w http.ResponseWriter, r *http.Request) {
 func CompanyJob(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	job, err := db.GetJobByID(id)
+	job, err := db.GetJobByID(r.Context(), id)
 	if err != nil {
 		http.Error(w, "Job not found", http.StatusNotFound)
 		return
@@ -47,7 +49,7 @@ func CompanyJob(w http.ResponseWriter, r *http.Request) {
 func RemoveJob(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 
-	if err := db.DeleteJob(id); err != nil {
+	if err := db.DeleteJob(r.Context(), id); err != nil {
 		http.Error(w, "Failed to delete job", http.StatusInternalServerError)
 		return
 	}

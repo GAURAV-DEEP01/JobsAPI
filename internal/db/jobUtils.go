@@ -11,8 +11,8 @@ import (
 )
 
 var (
-	GetAllJobs = func() ([]model.Job, error) {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	GetAllJobs = func(cont context.Context) ([]model.Job, error) {
+		ctx, cancel := context.WithTimeout(cont, 5*time.Second)
 		defer cancel()
 
 		collection := GetCollection(JobCollection)
@@ -31,8 +31,8 @@ var (
 		return jobs, nil
 	}
 
-	AddJob = func(job model.Job) error {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	AddJob = func(cont context.Context, job model.Job) error {
+		ctx, cancel := context.WithTimeout(cont, 5*time.Second)
 		defer cancel()
 
 		collection := GetCollection(JobCollection)
@@ -41,8 +41,8 @@ var (
 		return err
 	}
 
-	GetJobByID = func(id string) (model.Job, error) {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	GetJobByID = func(cont context.Context, id string) (model.Job, error) {
+		ctx, cancel := context.WithTimeout(cont, 5*time.Second)
 		defer cancel()
 
 		objID, err := primitive.ObjectIDFromHex(id)
@@ -60,8 +60,8 @@ var (
 		return job, nil
 	}
 
-	DeleteJob = func(id string) error {
-		ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	DeleteJob = func(cont context.Context, id string) error {
+		ctx, cancel := context.WithTimeout(cont, 5*time.Second)
 		defer cancel()
 
 		objID, err := primitive.ObjectIDFromHex(id)
