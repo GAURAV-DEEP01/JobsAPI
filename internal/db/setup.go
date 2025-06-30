@@ -3,9 +3,9 @@ package db
 import (
 	"context"
 	"log"
-	"os"
 	"time"
 
+	"github.com/gaurav-deep01/jobboard-api/internal/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -31,7 +31,7 @@ func InitMongo(uri string) *mongo.Client {
 		log.Fatal("MongoDB ping failed:", err)
 	}
 
-	JobDB = os.Getenv("DATABASE_NAME")
+	JobDB = util.MustGetenv("DATABASE_NAME")
 	log.Println("MongoDB connected")
 	MongoClient = client
 	return client

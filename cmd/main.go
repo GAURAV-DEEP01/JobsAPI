@@ -1,12 +1,14 @@
 package main
 
 import (
-	"github.com/gaurav-deep01/jobboard-api/internal/db"
-	"github.com/gaurav-deep01/jobboard-api/internal/routes"
-	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gaurav-deep01/jobboard-api/internal/db"
+	"github.com/gaurav-deep01/jobboard-api/internal/routes"
+	"github.com/gaurav-deep01/jobboard-api/internal/util"
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -14,7 +16,8 @@ func main() {
 	if err != nil {
 		log.Fatal("Error Failed to load .env file")
 	}
-	db.InitMongo(os.Getenv("DATABASE_URL"))
+
+	db.InitMongo(util.MustGetenv("DATABASE_URL"))
 	r := routes.SetupRouter()
 
 	port := os.Getenv("PORT")
